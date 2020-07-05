@@ -49,25 +49,21 @@ export class CurrentChat extends Component<{chat: string}, CurrentChatState> {
     }
 
     componentDidMount() {
-        if (Object.keys(this.state.chatData).length === 0) {
+        if (!this.state) {
             this.getChatData(this.props.chat);
-        }
-        if (this.state.messages.length === 0) {
             this.getChatMessages(this.props.chat);
         }
     }
 
     render() {
-        let messages = this.state.messages;
-        let chatData = this.state.chatData;
-        if (messages.length === 0 || Object.keys(chatData).length === 0) {
+        if (!this.state) {
             return (
                 <div>Loading...</div>
             )
         }
         return (
             <div>
-                <ChatInfo chatData={ chatData }/>
+                <ChatInfo chatData={ this.state.chatData }/>
 
             </div>
         )
