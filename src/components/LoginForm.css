@@ -1,0 +1,39 @@
+div#login {
+    width: 100vw;
+    height: 80vh;
+    display:  flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div#login form {
+    display: flex;
+    flex-direction: column;
+    background-color: #3399ff;
+    padding: 30px;
+    border-radius: 20px;
+    width: 30vw;
+    height: 20vh;
+    align-items: center;
+    justify-content: center;
+}
+
+div#login form div input {
+    margin-bottom: 20px;
+    height: 2vh;
+    width: %;
+}
+
+div#login form div {
+    display: flex;
+    justify-content: left;
+}
+
+div#login form button {
+    background-color: white;
+    border: 2px solid #0000ff;
+    width: 50%;
+    height: 15%;
+    font: 15px sans-serif;
+    border-radius: 20px;
+}
