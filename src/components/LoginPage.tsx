@@ -26,10 +26,10 @@ export function LoginPage(props: Props) {
             <div id="errors">
                 { error }
             </div>
-            <form id="loginForm">
+            <form id="loginForm" method="POST">
                 <input type="text" name="name"/>
                 <input type="text" name="password"/>
-                <button onClick={ getUserByInputedData }>Sign in</button>
+                <button onClick={ getUserByInputedData } type="button">Sign in</button>
             </form>
         </div>
     )
