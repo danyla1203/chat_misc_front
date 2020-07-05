@@ -1,4 +1,5 @@
 import React from "react";
+import "./LoginForm.css";
 
 type Props = {
     error?: string,
@@ -27,8 +28,14 @@ export function LoginPage(props: Props) {
                 { error }
             </div>
             <form id="loginForm" method="POST">
-                <input type="text" name="name"/>
-                <input type="text" name="password"/>
+                <div>
+                    <span>Name: </span>
+                    <input type="text" name="name"/>
+                </div>
+                <div>
+                    <span>Password: </span>
+                    <input type="text" name="password"/>
+                </div>
                 <button onClick={ getUserByInputedData } type="button">Sign in</button>
             </form>
         </div>
