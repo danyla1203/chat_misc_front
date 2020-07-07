@@ -1,24 +1,22 @@
 import React from "react";
 import "./LoginForm.css";
+import { UserSocket } from "./lib/UserSocket";
 
 type Props = {
     error?: string,
     setUserData: Function
+    socket: UserSocket
 }
 
 export function LoginPage(props: Props) {
     let getUserByInputedData = () => {
         let form = document.querySelector<HTMLFormElement>("#loginForm")!;
         let inputedData = new FormData(form);
-
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/data/user");
-        xhr.send(inputedData);
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                props.setUserData(JSON.parse(xhr.response));
-            }
-        }
+        inputedData = Object.assign({}, inputedData, {action: "login/data"});
+        
+        props.socket.get(inputedData, (result: any) => {
+            props.setUserData(result);
+        })
     } 
 
     let error = props.error ? props.error : "";
