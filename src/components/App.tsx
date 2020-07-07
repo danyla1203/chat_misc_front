@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { LoginPage } from './LoginPage';
 import { Home } from "./Home";
 
+import { UserSocket } from "./lib/UserSocket";
+
 export type UserData = {
     user_id: number,
     name: string,
@@ -11,6 +13,7 @@ export type UserData = {
 
 type userState = {
     userData: UserData,
+    socket: UserSocket
 }
 
 export class App extends Component<{}, userState> {
@@ -18,12 +21,14 @@ export class App extends Component<{}, userState> {
         if (this.state) {
             return;
         }
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/data/user");
-        xhr.send();
-        xhr.onload = () => {
-            this.setState({
-                userData: JSON.parse(xhr.response),
+        
+        let ws = new UserSocket("ws://localhost:8080");
+        ws.onopen = () => {
+            ws.get({ action: "login"}, (result) => {
+                this.setState({
+                    userData: result,
+                    socket: ws
+                })
             });
         }
     }
@@ -36,13 +41,23 @@ export class App extends Component<{}, userState> {
 
     render() {
         if (!this.state) {
-            return <LoginPage setUserData={ this.setUser } />;
+            return <LoginPage 
+                        setUserData={ this.setUser } 
+                        socket={ this.state }
+                    />;
 
         } else if (this.state.userData.error) {
-            return <LoginPage error={ this.state.userData.error} setUserData={ this.setUser }/>
+            return <LoginPage 
+                        error={ this.state.userData.error} 
+                        setUserData={ this.setUser }
+                        socket={ this.state.socket }
+                    />
 
         } else {
-            return <Home user={ this.state.userData }/>
+            return <Home 
+                        user={ this.state.userData }
+                        socket={ this.state.socket }
+                    />
         }
     }
 }
