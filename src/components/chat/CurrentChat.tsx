@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { ChatInfo } from "./ChatInfo";
+import { UserSocket } from "../lib/UserSocket";
 
 interface User {
     user_id: number;
@@ -25,33 +26,38 @@ type CurrentChatState = {
     chatData: ChatData,
     messages: Message[]
 }
-export class CurrentChat extends Component<{chat: string}, CurrentChatState> {
+type CurrentChatProps = {
+    chat: string,
+    socket: UserSocket
+}
+export class CurrentChat extends Component<CurrentChatProps, CurrentChatState> {
     getChatData(chatName: string) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", `/data/chat/${chatName}`);
-        xhr.send();
-        xhr.onload = () => {
+        this.props.socket.get({ action: `chat-data/${chatName}`}, (chatData) => {
             this.setState({
-                chatData: JSON.parse(xhr.response)
+                chatData: chatData
             })
-        }
+        });
     }
 
     getChatMessages(chatName: string) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", `/data/chat/messages/${chatName}`);
-        xhr.send();
-        xhr.onload = () => {
+        this.props.socket.get({ action: `chat-messages/${chatName}`}, (chatData) => {
             this.setState({
-                messages: JSON.parse(xhr.response)
+                chatData: chatData
             })
-        }
+        });
     }
 
     componentDidMount() {
         if (!this.state) {
-            this.getChatData(this.props.chat);
-            this.getChatMessages(this.props.chat);
+            let props = this.props;
+            this.getChatData(props.chat);
+            this.getChatMessages(props.chat);
+            
+            props.socket.get({action: `chat-message/${props.chat}`}, (result) => {
+                this.setState({
+                    messages: this.state.messages.concat(result)
+                })
+            })
         }
     }
 
