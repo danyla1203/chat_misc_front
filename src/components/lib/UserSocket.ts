@@ -11,6 +11,7 @@ interface Message extends IMessageEvent {
 
 interface Queue {
     data: Get,
+    once: boolean
     callback: (result: any) => void;
 }
 
@@ -20,12 +21,20 @@ export class UserSocket extends WebSocket {
     onmessage = this.delegateMessage;
 
     private delegateMessage(message: any) {
+        console.log(this.queue);
         let messageData = JSON.parse(message.data);
         let action = messageData.action;
         for (let i = 0; i < this.queue.length; i++) {
             let queueItem = this.queue[i];
+            let isOnce = this.queue[i].once;
             if (queueItem.data.action === action) {
-                queueItem.callback(messageData);
+                if (isOnce) {
+                    queueItem.callback(messageData);
+                    this.queue.splice(i, 1);
+                } else {
+                    queueItem.callback(messageData);
+                }
+                break;
             }
         }
     }
@@ -50,10 +59,21 @@ export class UserSocket extends WebSocket {
     get(data: Get, callback: (result: any) => void) {
         let queueItem = {
             data: data,
+            once: true,
             callback: callback
         }
         this.queue.push(queueItem);
         this.message(data);
     }
+
+    waitMessages(data: Get, callback: (result: any) => void) {
+        let queueItem = {
+            data: data,
+            once: false,
+            callback: callback
+        }
+        this.queue.push(queueItem);
+        this.message(data);
+    } 
 
 }   
