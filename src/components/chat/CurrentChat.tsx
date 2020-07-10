@@ -32,27 +32,35 @@ type CurrentChatProps = {
 }
 export class CurrentChat extends Component<CurrentChatProps, CurrentChatState> {
     getChatData(chatName: string) {
-        this.props.socket.get({ action: `chat-data/${chatName}`}, (chatData) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", `/data/chat-data/${chatName}`);
+        xhr.send();
+        xhr.onload = () => {
             this.setState({
-                chatData: chatData
+                chatData: JSON.parse(xhr.response)
             })
-        });
+        }
     }
 
     getChatMessages(chatName: string) {
-        this.props.socket.get({ action: `chat-messages/${chatName}`}, (chatData) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", `/data/messages/${chatName}`);
+        xhr.send();
+        xhr.onload = () => {
             this.setState({
-                chatData: chatData
+                messages: JSON.parse(xhr.response)
             })
-        });
+        }
     }
 
     componentDidMount() {
         if (!this.state) {
             let props = this.props;
+            //first time get chat data and messages
             this.getChatData(props.chat);
             this.getChatMessages(props.chat);
             
+            //it handle messages from server
             props.socket.get({action: `chat-message/${props.chat}`}, (result) => {
                 this.setState({
                     messages: this.state.messages.concat(result)
