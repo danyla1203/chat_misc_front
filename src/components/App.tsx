@@ -13,13 +13,19 @@ type userState = {
     userData: UserData,
 }
 export class App extends Component<{}, userState> {
+
+    constructor(props: any) {
+        super(props);
+        this.setUser = this.setUser.bind(this);
+    }
+
     componentDidMount() {
         if (this.state) {
             return;
         }
         
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/login");
+        xhr.open("GET", "http://localhost:8080/login");
         xhr.send();
         xhr.onload = () => {
             let result = JSON.parse(xhr.response);
