@@ -6,25 +6,34 @@ import { UserSocket } from "./lib/UserSocket";
 
 type HomeProps = {
     user: UserData,
-    socket: UserSocket
 }
 export function Home(props: HomeProps) {
     const [ currentChat, setChat ] = useState("");
+    const [ socket, setSocket ] = useState(new UserSocket("ws://localhost:8080"))
     
     const setCurrentChat = (chatLogin: string) => {
         setChat(chatLogin);
     }
 
-    return (
-        <div id="home">
-            <ChatList 
-                setChat={ setCurrentChat }
-                socket={ props.socket }
-            />
-            <CurrentChat 
-                chat={ currentChat } 
-                socket={ props.socket }
-            />
-        </div>
-    )
+    socket.onopen = () => {
+        setSocket(socket);
+    }
+    if (socket.readyState === 1) {
+        return (
+            <div id="home">
+                <ChatList 
+                    setChat={ setCurrentChat }
+                    socket={ socket }
+                />
+                <CurrentChat 
+                    chat={ currentChat } 
+                    socket={ socket }
+                />
+            </div>
+        )
+    } else {
+        return (
+            <div>Loading...</div>
+        )
+    }
 }
