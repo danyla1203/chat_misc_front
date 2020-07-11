@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ChatInfo } from "./ChatInfo";
 import { UserSocket } from "../lib/UserSocket";
 
-interface User {
+export interface User {
     user_id: number;
     name: string;
     avatar_url: string;
