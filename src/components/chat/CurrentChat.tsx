@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { ChatInfo } from "./ChatInfo";
+import { ChatMessages } from "./ChatMessages";
 import { UserSocket } from "../lib/UserSocket";
 
 export interface User {
@@ -7,7 +8,7 @@ export interface User {
     name: string;
     avatar_url: string;
 }
-export interface Message {
+export interface MessageType {
     message_id: number;
     text: string;
     autor: User
@@ -24,7 +25,7 @@ export interface ChatData {
 
 type CurrentChatState = {
     chatData: ChatData,
-    messages: Message[]
+    messages: MessageType[]
 }
 type CurrentChatProps = {
     chat: string,
@@ -78,7 +79,7 @@ export class CurrentChat extends Component<CurrentChatProps, CurrentChatState> {
         return (
             <div>
                 <ChatInfo chatData={ this.state.chatData }/>
-
+                <ChatMessages messages={ this.state.messages }/>
             </div>
         )
     }
