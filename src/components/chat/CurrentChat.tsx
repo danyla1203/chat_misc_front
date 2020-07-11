@@ -79,7 +79,10 @@ export class CurrentChat extends Component<CurrentChatProps, CurrentChatState> {
         return (
             <div>
                 <ChatInfo chatData={ this.state.chatData }/>
-                <ChatMessages messages={ this.state.messages }/>
+                <ChatMessages 
+                    messages={ this.state.messages }
+                    socket={ this.props.socket }
+                />
             </div>
         )
     }

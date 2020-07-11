@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { SendMessages } from "./SendMessage";
 import { Message } from "./Message";
 import { MessageType } from "./CurrentChat";
+import { UserSocket } from "../lib/UserSocket";
 
 type MessagesProps = {
     messages: MessageType[];
+    socket: UserSocket
 }
 type MessagesState = {
     messages: MessageType[];
@@ -25,7 +27,9 @@ export class ChatMessages extends Component<MessagesProps, MessagesState> {
         return (
             <div id="messages">
                 { renderedMessages }
-                <SendMessages />
+                <SendMessages 
+                    socket={ this.props.socket }
+                />
             </div>
         )
     }
