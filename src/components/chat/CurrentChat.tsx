@@ -62,7 +62,7 @@ export class CurrentChat extends Component<CurrentChatProps, CurrentChatState> {
             this.getChatMessages(props.chat);
             
             //it handle messages from server
-            props.socket.get({action: `chat-message/${props.chat}`}, (result) => {
+            props.socket.get(`chat-message/${props.chat}`, {}, (result) => {
                 this.setState({
                     messages: this.state.messages.concat(result)
                 })

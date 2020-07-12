@@ -56,9 +56,9 @@ export class UserSocket extends WebSocket {
         this.send(JSON.stringify(data));
     }
 
-    get(data: Get, callback: (result: any) => void) {
+    get(actionName: string, data: any, callback: (result: any) => void) {
         let queueItem = {
-            data: data,
+            data: Object.assign({}, { action: actionName }, data),
             once: true,
             callback: callback
         }

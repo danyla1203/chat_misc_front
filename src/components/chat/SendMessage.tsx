@@ -8,7 +8,7 @@ export function SendMessages(props: SendMessageProps) {
     const sendMessage = () => {
         let form = document.querySelector<HTMLFormElement>("#send_message_form")!;
         let input = form.elemnets.text;
-        props.socket.get({ action: "message", input: input }, (response) => {
+        props.socket.get("message", { input: input }, (response) => {
             if (!response.ok) {
                 alert("Something wrong, i can feel it");
             }
